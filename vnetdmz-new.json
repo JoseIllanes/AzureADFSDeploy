@@ -30,7 +30,7 @@
             "[parameters('virtualDMZNetworkAddressRange')]"
           ]
         },
-        "subnetsdmz": "[parameters('subnetsdmz')]"
+        "subnets": "[parameters('subnetsdmz')]"
       }
     }
   ],

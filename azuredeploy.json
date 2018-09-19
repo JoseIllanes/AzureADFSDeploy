@@ -448,7 +448,7 @@
           "subnetIds": {
             "value": [
               "[concat(reference('virtualNetworkDeployment').outputs.vnetId.value,'/subnets/',parameters('internalSubnetName'))]",
-              "[concat(reference('virtualNetworkDeployment').outputs.vnetId.value,'/subnets/',parameters('dmzSubnetName'))]"
+              "[concat(reference('virtualDMZNetworkDeployment').outputs.vnetId.value,'/subnets/',parameters('dmzSubnetName'))]"
             ]
           },
           "adfsBEAddressPoolID": {
