@@ -402,9 +402,6 @@
           },
           "adfsLoadBalancerPrivateIpAddress": {
             "value": "[parameters('adfsLoadBalancerPrivateIpAddress')]"
-          },
-          "DMZLoadBalancerPrivateIpAddress": {
-            "value": "[parameters('DMZLoadBalancerPrivateIpAddress')]"
           }
         }
       }
