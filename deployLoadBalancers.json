@@ -17,9 +17,6 @@
     "rdpNats": {
       "type": "array"
     },
-    "lbPublicIpResourceIds": {
-      "type": "array"
-    },
     "subnetIds": {
       "type": "array"
     },
