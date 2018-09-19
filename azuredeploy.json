@@ -79,7 +79,7 @@
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "DMZ"
+      "defaultValue": "sis-dmz"
     },
     "addc01NicIPAddress": {
       "type": "string",
