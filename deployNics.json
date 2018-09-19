@@ -16,9 +16,6 @@
     },
     "adfsBeAddressPoolID": {
       "type": "string"
-    },
-    "wapRDPNATRuleIDs": {
-      "type": "array"
     }
   },
   "resources": [
