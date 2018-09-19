@@ -151,13 +151,6 @@
       },
       "defaultValue": "10.11.4.240"
     },
-    "DMZLoadBalancerPrivateIpAddress": {
-      "type": "string",
-      "metadata": {
-        "description": "The internal IP address of the ADFS load balancer, this IP address will be statically assigned to the load balancer and must be a valid ip address within the Internal subnet."
-      },
-      "defaultValue": "10.11.8.240"
-    },
     "addcVmNamePrefix": {
       "type": "string",
       "metadata": {
