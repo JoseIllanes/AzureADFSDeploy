@@ -216,7 +216,7 @@
     }
   },
   "variables": {
-    "baseUrl": "https://raw.githubusercontent.com/paulomarquesc/adfs-6vms-regular-template-based/master/",
+    "baseUrl": "http://raw.githubusercontent.com/JoseIllanes/AzureADFSDeploy/master/",
     "storageAccountNamePrefix": "[concat(uniquestring(resourceGroup().id),'sa')]",
     "deployStorageAccountsUrl": "[concat(variables('baseUrl'),'/deployStorageAccounts.json')]",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
