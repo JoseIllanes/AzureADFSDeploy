@@ -134,7 +134,7 @@
       "metadata": {
         "description": "The internal IP address of the second WAP server, this IP address will be statically assigned to the WAP server and must be a valid ip address within the DMZ subnet."
       },
-      "defaultValue": "10.0.8.21"
+      "defaultValue": "10.11.8.21"
     },
     "adfsLoadBalancerPrivateIpAddress": {
       "type": "string",
@@ -287,29 +287,6 @@
       }
     },
     {
-      "name": "publicIpAddressesDeployment",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('deployPublicIPsUrl')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "publicIpName": {
-            "value": "[variables('publicIpName')]"
-          },
-          "publicIPAddressType": {
-            "value": "[variables('publicIPAddressType')]"
-          }
-        }
-      }
-    },
-    {
       "name": "availabilitySetsDeployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -402,6 +379,9 @@
           },
           "adfsLoadBalancerPrivateIpAddress": {
             "value": "[parameters('adfsLoadBalancerPrivateIpAddress')]"
+          },
+          "DMZLoadBalancerPrivateIpAddress": {
+            "value": "[parameters('DMZLoadBalancerPrivateIpAddress')]"
           }
         }
       }
