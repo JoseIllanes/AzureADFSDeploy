@@ -362,6 +362,38 @@
       }
     },
     {
+      "name": "virtualNetworkDeployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/nsgDeployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployVnetURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkNameDMZ')]"
+          },
+          "virtualNetworkAddressRange": {
+            "value": "[parameters('virtualNetworkAddressRangeDMZ')]"
+          },
+          "subnets": {
+            "value": "[variables('subnetsdmz')]"
+          },
+          "resourceGroupName": {
+            "value": "[parameters('virtualNetworkResourceGroupNameDMZ')]"
+          }
+        }
+      }
+    },
+    {
       "name": "loadBalancerDeployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -402,9 +434,6 @@
           },
           "adfsLoadBalancerPrivateIpAddress": {
             "value": "[parameters('adfsLoadBalancerPrivateIpAddress')]"
-          },
-          "DMZLoadBalancerPrivateIpAddress": {
-            "value": "[parameters('DMZLoadBalancerPrivateIpAddress')]"
           }
         }
       }
