@@ -93,7 +93,7 @@
       "metadata": {
         "description": "The address range of the dmz subnet, which contains the Windows application proxy servers, mandatory if creating a new virtual network."
       },
-      "defaultValue": "10.11.5.0/24"
+      "defaultValue": "10.11.8.0/24"
     },
     "dmzSubnetName": {
       "type": "string",
