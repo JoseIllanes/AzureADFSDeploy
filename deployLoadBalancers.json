@@ -25,6 +25,9 @@
     },
     "adfsLoadBalancerPrivateIpAddress": {
       "type": "string"
+    },
+    "DMZLoadBalancerPrivateIpAddress": {
+      "type": "string"
     }
   },
   "resources": [
@@ -94,13 +97,15 @@
       "type": "Microsoft.Network/loadBalancers",
       "location": "[parameters('location')]",
       "properties": {
-        "frontendIPConfigurations": [
+            "frontendIPConfigurations": [
           {
             "name": "[parameters('lbfe')]",
             "properties": {
-              "publicIPAddress": {
-                "id": "[parameters('lbPublicIpResourceIds')[0]]"
-              }
+              "subnet": {
+                "id": "[parameters('subnetIds')[1]]"
+              },
+              "privateIPAddress": "[parameters('DMZLoadBalancerPrivateIpAddress')]",
+              "privateIPAllocationMethod": "Static"
             }
           }
         ],

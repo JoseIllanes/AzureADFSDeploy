@@ -32,19 +32,18 @@
       ],
       "defaultValue": "new"
     },
+    
+    
+    
+    
+    
+    
     "virtualNetworkName": {
       "type": "string",
       "metadata": {
         "description": "The name of the Virtual Network to Create, mandatory on both existing or new virtual network usage."
       },
-      "defaultValue": "SIS-ARM-VNET01"
-    },
-    "virtualNetworkNameDMZ": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the Virtual Network for DMZ VNET to Create, mandatory on both existing or new virtual network usage."
-      },
-      "defaultValue": "SIS-ARM-DMZ"
+      "defaultValue": "sis-arm-vnet"
     },
     "virtualNetworkResourceGroupName": {
       "type": "string",
@@ -60,10 +59,24 @@
       },
       "defaultValue": "10.11.4.0/22"
     },
-    "virtualNetworkAddressRangeDMZ": {
+    "virtualDMZNetworkName": {
       "type": "string",
       "metadata": {
-        "description": "The address range of the new VNET DMZ, mandatory if creating a new virtual network."
+        "description": "The name of the Virtual Network to Create, mandatory on both existing or new virtual network usage."
+      },
+      "defaultValue": "sis-arm-dmzvnet"
+    },
+    "virtualDMZNetworkResourceGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the name of the resource group where the existing virtual network resides. When using an existing virtual network, this becomes a mandatory parameter so the deployment can find the ID of the existing virtual network."
+      },
+      "defaultValue": "n/a"
+    },
+    "virtualDMZNetworkAddressRange": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the new VNET, mandatory if creating a new virtual network."
       },
       "defaultValue": "10.11.8.0/22"
     },
@@ -72,7 +85,7 @@
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "SIS-NET01"
+      "defaultValue": "sis-net01"
     },
     "internalSubnetAddressRange": {
       "type": "string",
@@ -86,28 +99,28 @@
       "metadata": {
         "description": "The address range of the dmz subnet, which contains the Windows application proxy servers, mandatory if creating a new virtual network."
       },
-      "defaultValue": "10.11.8.0/24"
+      "defaultValue": "10.11.5.0/24"
     },
     "dmzSubnetName": {
       "type": "string",
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "DMZ"
+      "defaultValue": "sis-dmz"
     },
     "addc01NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the first Domain Controller, this IP address will be statically assigned to the DC and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.2"
+      "defaultValue": "10.11.4.4"
     },
     "addc02NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the second Domain Controller, this IP address will be statically assigned to the DC and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.3"
+      "defaultValue": "10.11.4.5"
     },
     "adfs01NicIPAddress": {
       "type": "string",
@@ -156,21 +169,21 @@
       "metadata": {
         "description": "Virtual Machine name prefix for Domain Controllers"
       },
-      "defaultValue": "sis-arm-dc"
+      "defaultValue": "sis-arm-dc0"
     },
     "adfsVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for ADFS servers"
       },
-      "defaultValue": "sis-arm-adfs"
+      "defaultValue": "sis-arm-adfs0"
     },
     "wapVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for WAP servers"
       },
-      "defaultValue": "sis-arm-wap"
+      "defaultValue": "sis-arm-wap0"
     },
     "addcVMsSize": {
       "type": "string",
@@ -217,9 +230,9 @@
     "publicIPAddressType": "Static",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
     "availabilitySetNames": [
-      "dc-set",
-      "adfs-set",
-      "wap-set"
+      "addc-as",
+      "adfs-as",
+      "wap-as"
     ],
     "deployVnetURL": "[concat(variables('baseUrl'),'/vnet-',parameters('virtualNetworkUsage'),'.json')]",
     "subnets": [
@@ -231,7 +244,10 @@
             "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Internal-sn-nsg')]"
           }
         }
-      },
+      }
+    ],
+    "deployDMZVnetURL": "[concat(variables('baseUrl'),'/vnetdmz-',parameters('virtualNetworkUsage'),'.json')]",
+    "subnetsdmz": [
       {
         "name": "[parameters('dmzSubnetName')]",
         "properties": {
@@ -280,29 +296,6 @@
           },
           "storageAccountNamePrefix": {
             "value": "[variables('storageAccountNamePrefix')]"
-          }
-        }
-      }
-    },
-    {
-      "name": "publicIpAddressesDeployment",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('deployPublicIPsUrl')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "publicIpName": {
-            "value": "[variables('publicIpName')]"
-          },
-          "publicIPAddressType": {
-            "value": "[variables('publicIPAddressType')]"
           }
         }
       }
@@ -360,6 +353,45 @@
       }
     },
     {
+      "name": "virtualDMZNetworkDeployment",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/nsgDeployment"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployDMZVnetURL')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "virtualDMZNetworkName": {
+            "value": "[parameters('virtualDMZNetworkName')]"
+          },
+          "virtualDMZNetworkAddressRange": {
+            "value": "[parameters('virtualDMZNetworkAddressRange')]"
+          },
+          "subnetsdmz": {
+            "value": "[variables('subnetsdmz')]"
+          },
+          "resourceGroupName": {
+            "value": "[parameters('virtualDMZNetworkResourceGroupName')]"
+          }
+        }
+      }
+    },
+
+
+
+
+
+
+
+    {
       "name": "loadBalancerDeployment",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -400,6 +432,9 @@
           },
           "adfsLoadBalancerPrivateIpAddress": {
             "value": "[parameters('adfsLoadBalancerPrivateIpAddress')]"
+          },
+          "DMZLoadBalancerPrivateIpAddress": {
+            "value": "[parameters('DMZLoadBalancerPrivateIpAddress')]"
           }
         }
       }
@@ -409,6 +444,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
+        "Microsoft.Resources/deployments/virtualNetworkDeployment",
         "Microsoft.Resources/deployments/loadBalancerDeployment",
         "Microsoft.Resources/deployments/availabilitySetsDeployment"
       ],

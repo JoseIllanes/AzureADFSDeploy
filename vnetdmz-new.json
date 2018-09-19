@@ -5,13 +5,13 @@
     "location": {
       "type": "string"
     },
-    "virtualNetworkName": {
+    "virtualDMZNetworkName": {
       "type": "string"
     },
-    "virtualNetworkAddressRange": {
+    "virtualDMZNetworkAddressRange": {
       "type": "string"
     },
-    "subnets": {
+    "subnetsdmz": {
       "type": "array"
     },
     "resourceGroupName":{
@@ -20,23 +20,23 @@
   },
   "resources": [
     {
-      "name": "[parameters('virtualNetworkName')]",
+      "name": "[parameters('virtualDMZNetworkName')]",
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[parameters('virtualNetworkAddressRange')]"
+            "[parameters('virtualDMZNetworkAddressRange')]"
           ]
         },
-        "subnets": "[parameters('subnets')]"
+        "subnetsdmz": "[parameters('subnetsdmz')]"
       }
     }
   ],
   "outputs": {
     "vnetId": {
-      "value": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualDMZNetworkName'))]",
       "type": "string"
     }
   }
