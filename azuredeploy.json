@@ -196,9 +196,9 @@
     "publicIPAddressType": "Static",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
     "availabilitySetNames": [
-      "dc-set",
-      "adfs-set",
-      "wap-set"
+      "addc-as",
+      "adfs-as",
+      "wap-as"
     ],
     "deployVnetURL": "[concat(variables('baseUrl'),'/vnet-',parameters('virtualNetworkUsage'),'.json')]",
     "subnets": [
@@ -223,8 +223,8 @@
     ],
     "deployLoadBalancersUrl": "[concat(variables('baseUrl'),'/deployLoadBalancers.json')]",
     "loadBalancerNames": [
-      "adfsilb",
-      "wapelb"
+      "adf-ilb",
+      "wap-lb"
     ],
     "lbfe": "lbfe",
     "lbbe": "lbbe",
