@@ -37,7 +37,14 @@
       "metadata": {
         "description": "The name of the Virtual Network to Create, mandatory on both existing or new virtual network usage."
       },
-      "defaultValue": "sis-arm-vnet"
+      "defaultValue": "SIS-ARM-VNET01"
+    },
+    "virtualNetworkNameDMZ": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Virtual Network for DMZ VNET to Create, mandatory on both existing or new virtual network usage."
+      },
+      "defaultValue": "SIS-ARM-DMZ"
     },
     "virtualNetworkResourceGroupName": {
       "type": "string",
@@ -53,12 +60,19 @@
       },
       "defaultValue": "10.11.4.0/22"
     },
+    "virtualNetworkAddressRangeDMZ": {
+      "type": "string",
+      "metadata": {
+        "description": "The address range of the new VNET DMZ, mandatory if creating a new virtual network."
+      },
+      "defaultValue": "10.11.8.0/22"
+    },
     "internalSubnetName": {
       "type": "string",
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "sis-net01"
+      "defaultValue": "SIS-NET01"
     },
     "internalSubnetAddressRange": {
       "type": "string",
@@ -79,7 +93,7 @@
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "sis-dmz"
+      "defaultValue": "DMZ"
     },
     "addc01NicIPAddress": {
       "type": "string",
@@ -130,26 +144,33 @@
       },
       "defaultValue": "10.11.4.240"
     },
+    "DMZLoadBalancerPrivateIpAddress": {
+      "type": "string",
+      "metadata": {
+        "description": "The internal IP address of the ADFS load balancer, this IP address will be statically assigned to the load balancer and must be a valid ip address within the Internal subnet."
+      },
+      "defaultValue": "10.11.8.240"
+    },
     "addcVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for Domain Controllers"
       },
-      "defaultValue": "sis-arm-dc0"
+      "defaultValue": "sis-arm-dc"
     },
     "adfsVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for ADFS servers"
       },
-      "defaultValue": "sis-arm-adfs0"
+      "defaultValue": "sis-arm-adfs"
     },
     "wapVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for WAP servers"
       },
-      "defaultValue": "sis-arm-wap0"
+      "defaultValue": "sis-arm-wap"
     },
     "addcVMsSize": {
       "type": "string",
@@ -196,9 +217,9 @@
     "publicIPAddressType": "Static",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
     "availabilitySetNames": [
-      "addc-as",
-      "adfs-as",
-      "wap-as"
+      "dc-set",
+      "adfs-set",
+      "wap-set"
     ],
     "deployVnetURL": "[concat(variables('baseUrl'),'/vnet-',parameters('virtualNetworkUsage'),'.json')]",
     "subnets": [
@@ -223,8 +244,8 @@
     ],
     "deployLoadBalancersUrl": "[concat(variables('baseUrl'),'/deployLoadBalancers.json')]",
     "loadBalancerNames": [
-      "adf-ilb",
-      "wap-lb"
+      "adfsilb",
+      "wapelb"
     ],
     "lbfe": "lbfe",
     "lbbe": "lbbe",
@@ -388,7 +409,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "Microsoft.Resources/deployments/virtualNetworkDeployment",
         "Microsoft.Resources/deployments/loadBalancerDeployment",
         "Microsoft.Resources/deployments/availabilitySetsDeployment"
       ],
