@@ -6,8 +6,7 @@
       "type": "string",
       "metadata": {
         "description": "The region to deploy the resources into, e.g. East US."
-      },
-      "defaultValue": "West Europe"
+      }
     },
     "storageAccountType": {
       "type": "string",
@@ -37,7 +36,7 @@
       "metadata": {
         "description": "The name of the Virtual Network to Create, mandatory on both existing or new virtual network usage."
       },
-      "defaultValue": "sis-arm-vnet"
+      "defaultValue": "adfs-infra-vnet"
     },
     "virtualNetworkResourceGroupName": {
       "type": "string",
@@ -51,105 +50,105 @@
       "metadata": {
         "description": "The address range of the new VNET, mandatory if creating a new virtual network."
       },
-      "defaultValue": "10.11.4.0/22"
+      "defaultValue": "10.0.0.0/16"
     },
     "internalSubnetName": {
       "type": "string",
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "sis-net01"
+      "defaultValue": "Internal-sn"
     },
     "internalSubnetAddressRange": {
       "type": "string",
       "metadata": {
         "description": "The address range of the internal subnet, which contains the Domain Controllers and ADFS servers, mandatory if creating a new virtual network."
       },
-      "defaultValue": "10.11.4.0/24"
+      "defaultValue": "10.0.0.0/24"
     },
     "dmzSubnetAddressRange": {
       "type": "string",
       "metadata": {
         "description": "The address range of the dmz subnet, which contains the Windows application proxy servers, mandatory if creating a new virtual network."
       },
-      "defaultValue": "10.11.8.0/24"
+      "defaultValue": "10.0.1.0/24"
     },
     "dmzSubnetName": {
       "type": "string",
       "metadata": {
         "description": "The name of the internal subnet, mandatory on both virtual network usage options (new or existing)."
       },
-      "defaultValue": "DMZ"
+      "defaultValue": "DMZ-sn"
     },
     "addc01NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the first Domain Controller, this IP address will be statically assigned to the DC and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.2"
+      "defaultValue": "10.0.0.101"
     },
     "addc02NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the second Domain Controller, this IP address will be statically assigned to the DC and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.3"
+      "defaultValue": "10.0.0.102"
     },
     "adfs01NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the first ADFS server, this IP address will be statically assigned to the ADFS server and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.11"
+      "defaultValue": "10.0.0.201"
     },
     "adfs02NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the second ADFS server, this IP address will be statically assigned to the ADFS server and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.12"
+      "defaultValue": "10.0.0.202"
     },
     "wap01NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the first WAP server, this IP address will be statically assigned to the WAP server and must be a valid ip address within the DMZ subnet."
       },
-      "defaultValue": "10.11.8.20"
+      "defaultValue": "10.0.1.101"
     },
     "wap02NicIPAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the second WAP server, this IP address will be statically assigned to the WAP server and must be a valid ip address within the DMZ subnet."
       },
-      "defaultValue": "10.11.8.21"
+      "defaultValue": "10.0.1.102"
     },
     "adfsLoadBalancerPrivateIpAddress": {
       "type": "string",
       "metadata": {
         "description": "The internal IP address of the ADFS load balancer, this IP address will be statically assigned to the load balancer and must be a valid ip address within the Internal subnet."
       },
-      "defaultValue": "10.11.4.240"
+      "defaultValue": "10.0.0.200"
     },
     "addcVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for Domain Controllers"
       },
-      "defaultValue": "sis-arm-dc0"
+      "defaultValue": "dc"
     },
     "adfsVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for ADFS servers"
       },
-      "defaultValue": "sis-arm-adfs0"
+      "defaultValue": "adfs"
     },
     "wapVmNamePrefix": {
       "type": "string",
       "metadata": {
         "description": "Virtual Machine name prefix for WAP servers"
       },
-      "defaultValue": "sis-arm-wap0"
+      "defaultValue": "wap"
     },
     "addcVMsSize": {
       "type": "string",
@@ -196,9 +195,9 @@
     "publicIPAddressType": "Static",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
     "availabilitySetNames": [
-      "dc-set",
-      "adfs-set",
-      "wap-set"
+      "addc-as",
+      "adfs-as",
+      "wap-as"
     ],
     "deployVnetURL": "[concat(variables('baseUrl'),'/vnet-',parameters('virtualNetworkUsage'),'.json')]",
     "subnets": [
@@ -223,8 +222,8 @@
     ],
     "deployLoadBalancersUrl": "[concat(variables('baseUrl'),'/deployLoadBalancers.json')]",
     "loadBalancerNames": [
-      "adfsilb",
-      "wapelb"
+      "adfs-lb",
+      "wap-lb"
     ],
     "lbfe": "lbfe",
     "lbbe": "lbbe",
