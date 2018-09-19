@@ -217,7 +217,7 @@
     "publicIPAddressType": "Static",
     "deployAvailabilitySetsUrl": "[concat(variables('baseUrl'),'/deployAvailabilitySets.json')]",
     "availabilitySetNames": [
-      "addc-set",
+      "dc-set",
       "adfs-set",
       "wap-set"
     ],
@@ -231,10 +231,7 @@
             "id": "[resourceId('Microsoft.Network/networkSecurityGroups','Internal-sn-nsg')]"
           }
         }
-      }
-    ],
-    "deployVnetDMZURL": "[concat(variables('baseUrl'),'/vnetdmz-',parameters('virtualNetworkUsage'),'.json')]",
-    "subnetsdmz": [
+      },
       {
         "name": "[parameters('dmzSubnetName')]",
         "properties": {
@@ -247,8 +244,8 @@
     ],
     "deployLoadBalancersUrl": "[concat(variables('baseUrl'),'/deployLoadBalancers.json')]",
     "loadBalancerNames": [
-      "adfs-lb",
-      "wap-lb"
+      "adfsilb",
+      "wapelb"
     ],
     "lbfe": "lbfe",
     "lbbe": "lbbe",
@@ -358,38 +355,6 @@
           },
           "resourceGroupName": {
             "value": "[parameters('virtualNetworkResourceGroupName')]"
-          }
-        }
-      }
-    },
-    {
-      "name": "virtualNetworkDeployment",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/nsgDeployment"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('deployVnetURL')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "virtualNetworkName": {
-            "value": "[parameters('virtualNetworkNameDMZ')]"
-          },
-          "virtualNetworkAddressRange": {
-            "value": "[parameters('virtualNetworkAddressRangeDMZ')]"
-          },
-          "subnets": {
-            "value": "[variables('subnetsdmz')]"
-          },
-          "resourceGroupName": {
-            "value": "[parameters('virtualNetworkResourceGroupNameDMZ')]"
           }
         }
       }
