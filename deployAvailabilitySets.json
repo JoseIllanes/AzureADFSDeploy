@@ -13,7 +13,10 @@
     {
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('availabilitySetNames')[copyIndex()]]",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2018-06-01",
+      "sku": {
+      "name": "Aligned"
+          },
       "location": "[parameters('location')]",
       "copy": {
         "name":"avsetCopy",
