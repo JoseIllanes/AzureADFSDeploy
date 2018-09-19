@@ -134,17 +134,7 @@
               "privateIPAddress": "[parameters('ipAddresses')[4]]",
               "subnet": {
                 "id": "[parameters('subnetIds')[1]]"
-              },
-              "loadBalancerBackendAddressPools": [
-                {
-                  "id": "[parameters('wapBEAddressPoolID')]"
-                }
-              ],
-              "loadBalancerInboundNatRules": [
-                {
-                  "id": "[parameters('wapRDPNATRuleIDs')[0]]"
-                }
-              ]
+              }
             }
           }
         ]
@@ -165,17 +155,7 @@
               "privateIPAddress": "[parameters('ipAddresses')[5]]",
               "subnet": {
                 "id": "[parameters('subnetIds')[1]]"
-              },
-              "loadBalancerBackendAddressPools": [
-                {
-                  "id": "[parameters('wapBEAddressPoolID')]"
-                }
-              ],
-              "loadBalancerInboundNatRules": [
-                {
-                  "id": "[parameters('wapRDPNATRuleIDs')[1]]"
-                }
-              ]
+              }
             }
           }
         ]
